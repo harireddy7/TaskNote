@@ -1,26 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider, CssBaseline, createMuiTheme, makeStyles } from '@material-ui/core';
 
-function App() {
+import Header from './Components/Header';
+import Main from './Components/Main';
+import Footer from './Components/Footer';
+
+const appTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#4B0082',
+      light: '#ACD7AE',
+      // dark: '#FFA5A5',
+      dark: '#6E67C2'
+    },
+    light: {
+      main: '#FFF',
+      light: '#EEF5FF',
+      dark: '#D8DBF0'
+    }
+  },
+  typography: {
+    fontFamily: "'Montserrat', sans-serif"
+  }
+});
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    minHeight: '100vh',
+    display: 'grid',
+    gridTemplateRows: '40px auto 40px'
+  }
+}));
+
+const App = () => {
+  const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={appTheme}>
+      <CssBaseline />
+      <div className={classes.container}>
+        <Header />
+        <Main />
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
