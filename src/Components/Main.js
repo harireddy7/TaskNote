@@ -1,103 +1,97 @@
 import React, { useState } from 'react';
 import NewTask from '../Pages/NewTask';
 import Navigator from './Navigator';
-import { makeStyles } from '@material-ui/core';
 import { getTasks, updateTasks } from '../useLocalStorage';
-// import ConfirmDialog from './ConfirmDialog';
-
-// const MESSAGES = {
-//   deleteTask: 'Do you wish to delete this task',
-//   completeTask: 'Are you sure to complete this task',
-//   activeTask: 'Do you wish to make this task Active again'
-// };
-
-const useStyles = makeStyles(theme => ({
-  mainContainer: {
-    // marginTop: '60px'
-  }
-}));
+import FilterTask from './FilterTask';
 
 const Main = () => {
-  const classes = useStyles();
+	const TASKS = getTasks();
+	const [tasks, setTasks] = useState(() => TASKS);
+	const [tabValue, setTabValue] = useState(0);
+	const [editableTask, setEditableTask] = useState(null);
 
-  const [tasks, setTasks] = useState(() => getTasks());
-  const [tabValue, setTabValue] = useState(0);
-  // const [dialogState, toggleDialog] = useState({
-  //   open: false,
-  //   message: ''
-  // });
+	const changeTab = (_, val) => setTabValue(val);
 
-  const [editableTask, setEditableTask] = useState(null);
+	const addTask = (task) => {
+		const revisedTasks = [task, ...TASKS];
 
-  const changeTab = (_, val) => setTabValue(val);
+		updateTasks(revisedTasks);
+		setTasks(revisedTasks);
 
-  const addTask = task => {
-    const revisedTasks = [task, ...tasks];
+		if (tabValue === 1) {
+			setTabValue(0);
+		}
+	};
 
-    updateTasks(revisedTasks);
-    setTasks(revisedTasks);
+	const editTask = (id) => {
+		const targetTask = TASKS.find((task) => task.id === id);
+		setEditableTask(targetTask);
+	};
 
-    if (tabValue === 1) {
-      setTabValue(0);
-    }
-  };
+	const updateTask = (editedTask) => {
+		const index = TASKS.findIndex((task) => task.id === editedTask.id);
+		const revisedTasks = [...TASKS];
+		revisedTasks[index] = { ...editedTask };
 
-  const editTask = id => {
-    const targetTask = tasks.find(task => task.id === id);
-    setEditableTask(targetTask);
-  };
+		setTasks(revisedTasks);
+		updateTasks(revisedTasks);
 
-  const updateTask = editedTask => {
-    const index = tasks.findIndex(task => task.id === editedTask.id);
-    const revisedTasks = [...tasks];
-    revisedTasks[index] = { ...editedTask };
+		if (tabValue === 1) {
+			setTabValue(0);
+		}
 
-    setTasks(revisedTasks);
-    updateTasks(revisedTasks);
+		setEditableTask(null);
+	};
 
-    if (tabValue === 1) {
-      setTabValue(0);
-    }
+	const deleteTask = (id) => {
+		const revisedTasks = TASKS.filter((task) => task.id !== id);
+		updateTasks(revisedTasks);
+		setTasks(revisedTasks);
+	};
 
-    setEditableTask(null);
-  };
+	const updateStatus = (id, status) => {
+		const index = TASKS.findIndex((task) => task.id === id);
+		const revisedTasks = [...TASKS];
+		revisedTasks[index] = {
+			...revisedTasks[index],
+			status: !status,
+			...(status
+				? { completedOn: +new Date() }
+				: { createdOn: +new Date(), completedOn: null }),
+		};
+		setTasks(revisedTasks);
+		updateTasks(revisedTasks);
 
-  const deleteTask = id => {
-    // toggleDialog({ open: true, message: MESSAGES.deleteTask });
+		setTabValue(status ? 1 : 0);
+	};
 
-    const revisedTasks = tasks.filter(task => task.id !== id);
-    updateTasks(revisedTasks);
-    setTasks(revisedTasks);
-  };
+	const filterTasks = (label) => {
+		if (label) {
+			const filteredTasks = TASKS.filter((task) => task.label === label);
+			setTasks(filteredTasks);
+		} else {
+			setTasks(TASKS);
+		}
+	};
 
-  const updateStatus = (id, status) => {
-    const index = tasks.findIndex(task => task.id === id);
-    const revisedTasks = [...tasks];
-    revisedTasks[index] = {
-      ...revisedTasks[index],
-      status: !status,
-      ...(status ? { completedOn: +new Date() } : { createdOn: +new Date(), completedOn: null })
-    };
-    setTasks(revisedTasks);
-    updateTasks(revisedTasks);
-
-    setTabValue(status ? 1 : 0);
-  };
-
-  return (
-    <div className={classes.mainContainer}>
-      <NewTask addTask={addTask} editableTask={editableTask} updateTask={updateTask} />
-      <Navigator
-        tasks={tasks}
-        tabValue={tabValue}
-        changeTab={changeTab}
-        deleteTask={deleteTask}
-        editTask={editTask}
-        updateStatus={updateStatus}
-      />
-      {/* {dialogState.open && <ConfirmDialog {...dialogState} confirmYes={() => {}} confirmNo={() => {}} />} */}
-    </div>
-  );
+	return (
+		<div>
+			<NewTask
+				addTask={addTask}
+				editableTask={editableTask}
+				updateTask={updateTask}
+			/>
+			<FilterTask onFilter={filterTasks} />
+			<Navigator
+				tasks={tasks}
+				tabValue={tabValue}
+				changeTab={changeTab}
+				deleteTask={deleteTask}
+				editTask={editTask}
+				updateStatus={updateStatus}
+			/>
+		</div>
+	);
 };
 
 export default Main;
