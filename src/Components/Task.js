@@ -11,20 +11,18 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column'
   },
-  details: {
-    // background: '#ccc'
-  },
   content: {
     paddingBottom: '1rem !important'
   },
-  title: {
+  title: props => ({
     fontWeight: 'bold',
     textTransform: 'capitalize',
+    textDecoration: props.status ? 'none' : 'line-through',
     fontSize: '1rem',
     [theme.breakpoints.only('xs')]: {
       fontSize: '0.9rem'
     }
-  },
+  }),
   subtitle: {
     fontStyle: 'italic',
     marginTop: '0.5rem',
@@ -41,7 +39,6 @@ const useStyles = makeStyles(theme => ({
   },
   controls: {
     display: 'flex',
-    // background: '#aaa',
     padding: '0.5rem 0',
     marginBottom: '0.5rem',
     '& button': {
@@ -52,31 +49,10 @@ const useStyles = makeStyles(theme => ({
       minWidth: '40px'
     }
   },
-  editBtn: {
-    // background: '#008000',
-    // color: theme.palette.light.main,
-    '&:hover': {
-      // background: '#006100'
-    }
-  },
-  deleteBtn: {
-    // background: '#f00',
-    // color: theme.palette.light.main,
-    '&:hover': {
-      // background: '#ef0000'
-    }
-  },
-  completeBtn: {
-    // background: '#00f',
-    // color: theme.palette.light.main,
-    '&:hover': {
-      // background: '#4b0082'
-    }
-  }
 }));
 
 const Task = ({ id, title, label, createdOn, completedOn, status, editTask, deleteTask, updateStatus }) => {
-  const classes = useStyles();
+  const classes = useStyles({ status });
 
   const handleEdit = () => editTask(id);
 
@@ -86,11 +62,10 @@ const Task = ({ id, title, label, createdOn, completedOn, status, editTask, dele
 
   return (
     <Card className={classes.root} id={`task-${id}`}>
-      <div className={classes.details}>
+      <div>
         <CardContent className={classes.content}>
           <div className={classes.title}>{title}</div>
           <div className={classes.subtitle}>
-            {/* <Chip color="secondary" size="small" label={label} className={classes.labelChip} /> */}
             <div className="task-label">{label}</div>
             <div className="createdDate">
               {status ? 'Created' : 'Completed'}: {new Date(status ? createdOn : completedOn).toLocaleString()}
@@ -100,14 +75,14 @@ const Task = ({ id, title, label, createdOn, completedOn, status, editTask, dele
       </div>
       <div className={classes.controls}>
         {status && (
-          <Button variant="contained" size="small" className={classes.editBtn} onClick={handleEdit}>
+          <Button variant="contained" size="small" onClick={handleEdit}>
             Edit
           </Button>
         )}
-        <Button variant="contained" size="small" className={classes.deleteBtn} onClick={handleDelete}>
+        <Button variant="contained" size="small"onClick={handleDelete}>
           Delete
         </Button>
-        <Button variant="contained" size="small" className={classes.completeBtn} onClick={handleToggleStatus}>
+        <Button variant="contained" size="small" onClick={handleToggleStatus}>
           {status ? 'Complete' : 'Active'}
         </Button>
       </div>
@@ -116,8 +91,3 @@ const Task = ({ id, title, label, createdOn, completedOn, status, editTask, dele
 };
 
 export default Task;
-
-// Task
-// Title
-// label | date
-// edit | delete | complete

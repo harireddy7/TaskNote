@@ -7,9 +7,6 @@ const useStyles = makeStyles(theme => ({
   tabsRoot: {
     background: theme.palette.primary.main
   },
-  tabBar: {
-    // background: theme.palette.light.main
-  }
 }));
 
 const Navigator = ({ tasks = [], tabValue, changeTab, editTask, ...rest }) => {
@@ -44,12 +41,9 @@ const Navigator = ({ tasks = [], tabValue, changeTab, editTask, ...rest }) => {
       <Paper className={classes.tabsRoot} id="tabs-root">
         <AppBar position="static" color="primary">
           <Tabs
-            // indicatorColor="primary"
-            // textColor="primary"
             centered
             value={tabValue}
             onChange={changeTab}
-            className={classes.tabBar}
           >
             <Tab label={`Active (${activeTasks.length})`} />
             <Tab label={`Completed (${completedTasks.length})`} />
