@@ -29,7 +29,7 @@ const Main = () => {
 		const revisedState = {
 			tasks: revisedTasks,
 			activeTab
-		}
+		};
 
 		if (filterLabel) revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
 		if (activeTab === 1) revisedState.activeTab = 0;
