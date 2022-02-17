@@ -71,7 +71,6 @@ const NewTask = ({ addTask, editableTask, updateTask }) => {
       deletedOn: null,
       status: true
     };
-    // console.log(newTask);
 
     if (editableTask && editableTask.id) {
       updateTask({

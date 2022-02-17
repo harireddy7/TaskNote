@@ -20,7 +20,6 @@ const Navigator = ({ tasks = [], activeTab, changeTab, editTask, ...rest }) => {
       entries.forEach(entry => {
         const tabsRootEl = document.getElementById('tabs-root');
         if (entry.boundingClientRect.bottom < 0) {
-          console.log(tabsRootEl);
           tabsRootEl.classList.add('sticky');
         } else {
           tabsRootEl.classList.remove('sticky');
