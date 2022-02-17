@@ -8,14 +8,17 @@ const initState = {
 	filterLabel: '',
 	activeTab: 0,
 	editableTask: null,
-	tasks: getTasks()
+	tasks: getTasks(),
 };
 
-const getFilteredTasks = (tasks, filterLabel) => tasks.filter((task) => task.label === filterLabel);
+const getFilteredTasks = (tasks, filterLabel) =>
+	tasks.filter((task) => task.label === filterLabel);
 
 const Main = () => {
-
-	const [state, setState] = React.useReducer((state, newState) => ({ ...state, ...newState }), initState);
+	const [state, setState] = React.useReducer(
+		(state, newState) => ({ ...state, ...newState }),
+		initState
+	);
 	const { filterLabel, activeTab, tasks, editableTask } = state;
 
 	const changeTab = (_, val) => setState({ activeTab: val });
@@ -28,10 +31,11 @@ const Main = () => {
 
 		const revisedState = {
 			tasks: revisedTasks,
-			activeTab
+			activeTab,
 		};
 
-		if (filterLabel) revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
+		if (filterLabel)
+			revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
 		if (activeTab === 1) revisedState.activeTab = 0;
 
 		setState(revisedState);
@@ -54,10 +58,11 @@ const Main = () => {
 		const revisedState = {
 			tasks: revisedTasks,
 			activeTab,
-			editableTask: null
-		}
+			editableTask: null,
+		};
 
-		if (filterLabel) revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
+		if (filterLabel)
+			revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
 		if (activeTab === 1) revisedState.activeTab = 0;
 
 		setState(revisedState);
@@ -69,10 +74,11 @@ const Main = () => {
 		updateTasks(revisedTasks);
 
 		const revisedState = {
-			tasks: revisedTasks
-		}
+			tasks: revisedTasks,
+		};
 
-		if (filterLabel) revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
+		if (filterLabel)
+			revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
 		setState(revisedState);
 	};
 
@@ -91,12 +97,13 @@ const Main = () => {
 
 		const revisedState = {
 			tasks: revisedTasks,
-			activeTab: status ? 1 : 0
-		}
+			activeTab: status ? 1 : 0,
+		};
 
-		if (filterLabel) revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
+		if (filterLabel)
+			revisedState.tasks = getFilteredTasks(revisedTasks, filterLabel);
 
-		setState(revisedState)
+		setState(revisedState);
 	};
 
 	const filterTasks = (label) => {
@@ -104,8 +111,8 @@ const Main = () => {
 
 		const revisedState = {
 			tasks: TASKS,
-			filterLabel: label
-		}
+			filterLabel: label,
+		};
 
 		if (label) revisedState.tasks = getFilteredTasks(TASKS, label);
 
