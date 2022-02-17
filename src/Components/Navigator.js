@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Navigator = ({ tasks = [], tabValue, changeTab, editTask, ...rest }) => {
+const Navigator = ({ tasks = [], activeTab, changeTab, editTask, ...rest }) => {
   const classes = useStyles();
 
   const activeTasks = tasks.filter(task => task.status);
@@ -42,7 +42,7 @@ const Navigator = ({ tasks = [], tabValue, changeTab, editTask, ...rest }) => {
         <AppBar position="static" color="primary">
           <Tabs
             centered
-            value={tabValue}
+            value={activeTab}
             onChange={changeTab}
           >
             <Tab label={`Active (${activeTasks.length})`} />
@@ -51,8 +51,8 @@ const Navigator = ({ tasks = [], tabValue, changeTab, editTask, ...rest }) => {
         </AppBar>
       </Paper>
       <div className="" id="tab-content">
-        {tabValue === 0 && <ActiveTasks activeTasks={activeTasks} editTask={editTask} {...rest} />}
-        {tabValue === 1 && <CompletedTasks completedTasks={completedTasks} {...rest} />}
+        {activeTab === 0 && <ActiveTasks activeTasks={activeTasks} editTask={editTask} {...rest} />}
+        {activeTab === 1 && <CompletedTasks completedTasks={completedTasks} {...rest} />}
       </div>
     </>
   );

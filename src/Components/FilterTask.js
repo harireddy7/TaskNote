@@ -24,16 +24,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const FilterTask = ({ onFilter }) => {
+const FilterTask = ({ filterLabel, onFilter }) => {
 	const classes = useStyles();
-	const [label, setLabel] = useState('');
 	const TASK_LABELS = getLabels();
-
-	const handleTextChange = (e) => {
-        const { value } = e.target;
-		setLabel(value);
-		onFilter(value);
-	};
 
 	return (
 		<Container
@@ -48,10 +41,8 @@ const FilterTask = ({ onFilter }) => {
 						options={TASK_LABELS}
 						autoComplete
 						freeSolo
-						value={label}
-						onChange={(_, value) =>
-							handleTextChange({ target: { name: 'label', value } })
-						}
+						value={filterLabel}
+						onChange={(_, value) => onFilter(value)}
 						renderInput={(params) => (
 							<TextField
 								{...params}
@@ -59,8 +50,8 @@ const FilterTask = ({ onFilter }) => {
 								name='label'
 								variant='outlined'
 								size='small'
-								value={label}
-								onChange={handleTextChange}
+								value={filterLabel}
+								onChange={e => onFilter(e.target.value)}
 							/>
 						)}
 					/>
